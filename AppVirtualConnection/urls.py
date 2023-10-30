@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import *
+from .viewsLogin import *
 urlpatterns=[
         path('',Inicio,name="InicioPage"),
         path('Inicio',Inicio,name="InicioPage"),
@@ -10,4 +11,6 @@ urlpatterns=[
         path('Tableros/',Tableros,name="TablerosPage"),
         path('Productos/',Productos,name="ProductosPage"),
         path('CerrarSesion/',CerrarSesion,name="CerrarSesionPage"),
+        path('RegistroUsuarios/',RegistroUsuarios,name="RegistrarPage")
+
 ]
