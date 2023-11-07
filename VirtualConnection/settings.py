@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -39,8 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    
 ]
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,18 +82,22 @@ WSGI_APPLICATION = 'VirtualConnection.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.dummy',  # Utiliza un motor ficticio para evitar errores
-        'NAME': 'https://virtualconnection-643e6-default-rtdb.firebaseio.com/',
-        'TEST': {
-            'SERIALIZE': False,
-            'MIRROR': 'default'
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+AUTH_USER_MODEL = 'AppVirtualConnection.CustomUser'
 
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+FIREBASE_CONFIG  = {
+  "apiKey": "AIzaSyB_b0S3kj_ZVl0NSLp3NIWrD4uuEpjAihA",
+  "authDomain": "virtualconnection-643e6.firebaseapp.com",
+  "databaseURL": "https://virtualconnection-643e6-default-rtdb.firebaseio.com",
+  "projectId": "virtualconnection-643e6",
+  "storageBucket": "virtualconnection-643e6.appspot.com",
+  "messagingSenderId": "1093478819923",
+  "appId": "1:1093478819923:web:c0bf89d258396aba853ea6"
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

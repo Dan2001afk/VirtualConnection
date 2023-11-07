@@ -110,6 +110,12 @@
     <h1>Grafica con libreria plotly</h1>
     {{ graph | safe }}
 
+    
+    {% block content %}
+        {{ componente_sine_wave_str|safe }}
+    {% endblock %}
+
+
 </section>
 
 

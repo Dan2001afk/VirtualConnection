@@ -77,3 +77,18 @@ def Estadisticas(request):
     else:
         form = GraficaForm()
     return render(request, 'Estadisticas.html', {'form': form})
+
+
+
+
+
+# sliders_app/views.py
+
+from django.shortcuts import render
+from .pn_app import create_sine_wave_app
+
+def Dispositivos(request):
+    sine_wave_app = create_sine_wave_app()  # Crea la aplicación Panel
+    componente_sine_wave = sine_wave_app  # Suponiendo que el componente se encuentra directamente en la aplicación
+    componente_sine_wave_str = componente_sine_wave.pprint()
+    return render(request, 'Dispositivos.html', {'componente_sine_wave_str': componente_sine_wave_str})
