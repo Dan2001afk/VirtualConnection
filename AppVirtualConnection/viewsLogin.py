@@ -5,8 +5,15 @@ from .firebase_config import cred #CONEXION Y LLAMADO DE LA BASE DE DATOS FIRABA
 from django.shortcuts import render, redirect
 import json
 import requests
+from .forms import RegistroForm
+from firebase_admin import auth
+from django.http import JsonResponse
 
-def login_with_firebase(request):
+# Asegúrate de importar el formulario adecuado
+
+
+
+def login_firebase(request):
     error_message = ""
     if request.method == 'POST':
         email = request.POST['email']
@@ -75,3 +82,60 @@ def registro_usuario(request):
         form = RegistroForm()
 
     return render(request, 'register.html', {'form': form})
+
+
+
+
+
+#recuperar contraseña
+
+import requests
+
+def reset_password_firebase(email):
+    # Reemplaza 'API_KEY' con la clave de la API de tu proyecto Firebase
+    api_key = 'AIzaSyB_b0S3kj_ZVl0NSLp3NIWrD4uuEpjAihA'
+    url = f'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key={api_key}'
+
+    # Cuerpo de la solicitud para restablecer la contraseña
+    data = {
+        'requestType': 'PASSWORD_RESET',
+        'email': email,
+    }
+
+    # Realiza la solicitud a la API REST de Firebase
+    response = requests.post(url, json=data)
+
+    # Procesa la respuesta
+    if response.ok:
+        print('Correo electrónico de restablecimiento de contraseña enviado con éxito')
+    else:
+        print(f'Error al enviar el correo electrónico de restablecimiento de contraseña: {response.text}')
+
+# Ejemplo de uso
+email = 'camolo.777@gmail.com'
+reset_password_firebase(email)
+
+
+
+
+def reset_password_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email', '')
+
+        # Llama a la función para restablecer la contraseña en Firebase
+        result = reset_password_firebase(email)
+
+        # Maneja el caso en que la función devuelve None
+        if result is None:
+            return JsonResponse({'success': False, 'error_message': 'Hubo un error al procesar la solicitud.'})
+
+        # Desempaqueta el resultado
+        success, message = result
+
+        # Devuelve una respuesta JSON
+        if success:
+            return JsonResponse({'success': True, 'message': message})
+        else:
+            return JsonResponse({'success': False, 'error_message': message})
+
+    return render(request, 'reset_password.html')

@@ -4,6 +4,8 @@ from .viewsLogin import *
 from django.urls import path
 from . import views
 from . import viewsLogin
+
+
 urlpatterns=[
         
         path('',Inicio,name="InicioPage"),
@@ -17,9 +19,12 @@ urlpatterns=[
 
 
         #Autenticacion
-        path('IniciarSesion/', viewsLogin.login_with_firebase, name='login'),
+        path('IniciarSesion/', viewsLogin.login_firebase, name='login'),
         path('RegistrarUsuarios/', viewsLogin.registro_usuario, name='Registro'),
 
         #graficos
+        
+        #recuperacion de contraseña
+        path('reset-password/', reset_password_view, name='Reset-passwordPage'),
 
 ]       
