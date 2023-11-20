@@ -90,7 +90,10 @@ def registro_usuario(request):
 #recuperar contraseña
 
 import requests
+from django.http import JsonResponse
+from django.shortcuts import render
 
+# Función para enviar la solicitud de restablecimiento de contraseña a Firebase
 def reset_password_firebase(email):
     # Reemplaza 'API_KEY' con la clave de la API de tu proyecto Firebase
     api_key = 'AIzaSyB_b0S3kj_ZVl0NSLp3NIWrD4uuEpjAihA'
@@ -108,34 +111,20 @@ def reset_password_firebase(email):
     # Procesa la respuesta
     if response.ok:
         print('Correo electrónico de restablecimiento de contraseña enviado con éxito')
+        return {'success': True, 'message': 'Correo electrónico de restablecimiento de contraseña enviado con éxito'}
     else:
         print(f'Error al enviar el correo electrónico de restablecimiento de contraseña: {response.text}')
+        return {'success': False, 'error_message': f'Error al enviar el correo electrónico de restablecimiento de contraseña: {response.text}'}
 
-# Ejemplo de uso
-email = 'camolo.777@gmail.com'
-reset_password_firebase(email)
-
-
-
-
+# Vista de Django para el restablecimiento de contraseña
 def reset_password_view(request):
     if request.method == 'POST':
         email = request.POST.get('email', '')
 
         # Llama a la función para restablecer la contraseña en Firebase
-        result = reset_password_firebase(email)
-
-        # Maneja el caso en que la función devuelve None
-        if result is None:
-            return JsonResponse({'success': False, 'error_message': 'Hubo un error al procesar la solicitud.'})
-
-        # Desempaqueta el resultado
-        success, message = result
+        reset_password_firebase(email)
 
         # Devuelve una respuesta JSON
-        if success:
-            return JsonResponse({'success': True, 'message': message})
-        else:
-            return JsonResponse({'success': False, 'error_message': message})
+        return JsonResponse({'success': True, 'message': 'Solicitud de restablecimiento de contraseña exitosa. Verifica tu correo electrónico.'})
 
     return render(request, 'reset_password.html')

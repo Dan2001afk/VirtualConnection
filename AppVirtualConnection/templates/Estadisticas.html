@@ -106,20 +106,10 @@
 
 <section class="home">
     <div class="text">Estadisticas</div>
-    <h1>Grafica con libreria matplotlib</h1>
-    
-    <!-- formulario para generar la grafica de 2 valores-->
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Generar Gráfica</button>
-    </form>
-    
-    <!--si esta la grafica se muestra -->
-    {% if imagen_grafica %}
-        <h2>Gráfica generada:</h2>
-        <img src="data:image/png;base64,{{ imagen_grafica }}" alt="Mi Gráfica">
-    {% endif %}
+
+    <div class="main" id="main">
+        <div id="responsive-grid"><div class="react-grid-layout layout" style="height: 10px;"></div></div>
+        </div>
 
 </section>
 

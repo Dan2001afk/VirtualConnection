@@ -110,50 +110,9 @@
 
 <section class="home">
     <div class="text">Dashboard</div>
-    
-    <div id="dashboard">
-        <canvas id="myChart"></canvas>
-    </div>
-
-    <button class="open-button" onclick="openModal()">Abrir Formulario</button>
-
-
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal()">&times;</span>
-            <form id="chartForm">
-                <!-- Tipo de Gráfico -->
-                <label for="chartType">Tipo de Gráfico:</label>
-                <select id="chartType">
-                    <option value="bar">Gráfico de Barras</option>
-                    <option value="line">Gráfico de Línea</option>
-                    <option value="pie">Gráfico de pie</option>
-                    
-                    <!-- Puedes agregar más tipos de gráficos aquí -->
-                </select>
-
-                <!-- Etiqueta del Gráfico -->
-                <label for="chartLabel">Etiqueta del Gráfico:</label>
-                <input type="text" id="chartLabel" placeholder="Ejemplo: Ventas Mensuales">
-
-                <!-- Etiquetas de Datos -->
-                <label for="chartLabels">Etiquetas de Datos (separadas por comas):</label>
-                <input type="text" id="chartLabels" placeholder="Ejemplo: Enero, Febrero, Marzo, Abril, Mayo">
-
-                <!-- Datos -->
-                <label for="chartData">Datos (separados por comas):</label>
-                <input type="text" id="chartData" placeholder="Ejemplo: 12, 19, 3, 5, 2">
-
-                <!-- Botón para Crear Gráfico -->
-                <button type="button" onclick="crearGrafico()">Crear Gráfico</button>
-            </form>
-        </div>
-    </div>
-
-
-
-
+    {{ html_output|safe }}
 </section>
+
 
 <script src="{% static 'js/Dashboard.js' %}"></script>
 <script src="{% static 'js/script.js' %}"></script>

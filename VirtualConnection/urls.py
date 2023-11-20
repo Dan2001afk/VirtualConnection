@@ -15,10 +15,36 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from bokeh_django import autoload, static_extensions, directory, document
 from django.urls import path, include
+from .settings import BASE_DIR
+from AppVirtualConnection import views
+from django.apps import apps
+
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(r"", views.index, name="index"),
+    path("admin/", admin.site.urls),
+    path("sea-surface-temp", views.sea_surface),
+    path("my-sea-surface", views.sea_surface_custom_uri),
+    path("shapes", views.shapes),
+    *static_extensions(),
+    
     path('', include('AppVirtualConnection.urls')),
+]
+
+
+base_path = BASE_DIR
+apps_path = base_path / "bokeh_apps"
+
+bokeh_apps = [
+    *directory(apps_path),
+    document("sea_surface_direct", views.sea_surface_handler),
+    document("sea_surface_with_template", views.sea_surface_handler_with_template),
+    document("sea_surface_bokeh", apps_path / "sea_surface.py"),
+    document("shape_viewer", views.shape_viewer_handler),
+    autoload("sea-surface-temp", views.sea_surface_handler),
+    autoload("sea_surface_custom_uri", views.sea_surface_handler),
+    autoload('shapes', views.shape_viewer_handler),
 ]

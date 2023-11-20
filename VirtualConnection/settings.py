@@ -13,10 +13,18 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+
+from bokeh.settings import bokehjsdir, settings as bokeh_settings
+
+try:
+    import bokeh_django
+    bokeh_app_module = 'bokeh_django'
+except ModuleNotFoundError:
+    bokeh_app_module = 'bokeh.server.django'
 
 
+MODULE_DIR = Path(__file__).resolve().parent
+BASE_DIR = MODULE_DIR.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -27,21 +35,24 @@ SECRET_KEY = 'django-insecure--)*_ml*1lhr(h@7nhaq_(kpq=^_-@hw5@5lms35exq+wu)i7-0
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'AppVirtualConnection',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'AppVirtualConnection',
+    'channels',
+    'bokeh_django',
     
 ]
+
 
 
 
@@ -61,7 +72,7 @@ ROOT_URLCONF = 'VirtualConnection.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [MODULE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,11 +85,10 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'VirtualConnection.wsgi.application'
+ASGI_APPLICATION = 'VirtualConnection.routing.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
@@ -133,8 +143,9 @@ FIREBASE_CREDENTIALS_PATH = os.environ.get("FIREBASE_CREDENTIALS_PATH", "ruta/a/
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/Dashboard/static/'
 STATICFILES_DIRS=(os.path.join(BASE_DIR,'AppVirtualConnection/static'),)
+bokehjsdir(),
 
 # settings.py
 
@@ -147,17 +158,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    'bokeh_django.static.BokehExtensionFinder',
+)
 
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ICED.SENA@gmail.com'
-EMAIL_HOST_PASSWORD = 'xaikinmfjligvpyh'
-
-SITE_ID = 1
-# settings.py
-
-DEFAULT_FROM_EMAIL = 'noreply@example.com'
+THEMES_DIR = MODULE_DIR / "themes"
